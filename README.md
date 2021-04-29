@@ -29,10 +29,6 @@ In this simulation's current form, I am only keeping track of the outcome of the
 
 The fielding team is assumed to never make errors.
 
-### Extra Innings
-
-The current iteration of this simulation does not account for extra innings, though this is something that I hope to fix soon, as it should be a simple fix.
-
 ### The Count
 
 Because this simulation was created to test the abilities of hitters, I only really cared about the outcome of the plate appearance, and not how it progressed. So there is no mechanism in this project to keep track of the count.

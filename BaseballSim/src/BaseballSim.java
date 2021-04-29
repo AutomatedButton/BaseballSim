@@ -24,6 +24,8 @@ public class BaseballSim {
         int teamTwoScore = 0;
         // These keep track of the outs in a half-inning and the basepaths
         int outs = 0;
+        boolean isGameOver = false;
+        int inning = 1;
         ArrayList<Hitter> basepaths = new ArrayList<Hitter>();
         // This loop just sets up the basepaths
         for (int i = 0; i < 3; i++) {
@@ -32,7 +34,7 @@ public class BaseballSim {
         // This variable just keeps track of the outcome of the current plate appearance
         PAOutcome PAResult;
         // This is the main loop
-        for (int inning = 1; inning < 10; inning++){
+        while (!isGameOver) {
             /* This while loop simulates a half inning with TeamOne hitting. This is probably
              the area of the code I'm least satisfied with, because it repeats itself a fair bit
              in the bottom half of the inning.*/
@@ -97,6 +99,8 @@ public class BaseballSim {
             // In the current build this is the middle of the inning
 
             if (inning == 9 && (teamTwoScore > teamOneScore)) {
+                isGameOver = true;
+                System.out.println("The game ended after 8 1/2 innings");
                 break;
             }
 
@@ -158,6 +162,10 @@ public class BaseballSim {
             outs = 0;
             basepaths = ClearBases(basepaths);
             System.out.println("End of Inning " + inning + ": TeamOne: " + teamOneScore + " TeamTwo: " + teamTwoScore);
+            if (inning >= 9 && teamOneScore != teamTwoScore) {
+                isGameOver = false;
+            }
+            inning++;
 
         }
         System.out.println("Final: TeamOne: " + teamOneScore + ", TeamTwo: " + teamTwoScore);
@@ -186,7 +194,7 @@ public class BaseballSim {
         if (OrderPosition >= 9) {
             return 1;
         }
-        return OrderPosition++;
+        return OrderPosition + 1;
     }
 
     public static int ScoreAllBases(int score, ArrayList<Hitter> bases) {
