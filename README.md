@@ -21,6 +21,18 @@ Along with the things mentioned in the previous section, players will never atte
 
 Every pitcher on both teams is assumed to be completely average and unremarkable so that every player can hit their average over time. That said these pitchers will never throw a wild pitch or hit a batter.
 
+### Hitting
+
+In this simulation's current form, I am only keeping track of the outcome of the plate appearance, so I did not simulate where a ball was hit if a batter hit a single. Also, a batter will never try to bunt a ball.
+
+### Fielding
+
+The fielding team is assumed to never make errors.
+
+### Extra Innings
+
+The current iteration of this simulation does not account for extra innings, though this is something that I hope to fix soon, as it should be a simple fix.
+
 ### The Count
 
 Because this simulation was created to test the abilities of hitters, I only really cared about the outcome of the plate appearance, and not how it progressed. So there is no mechanism in this project to keep track of the count.
