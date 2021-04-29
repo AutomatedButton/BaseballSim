@@ -8,8 +8,7 @@ public class Hitter {
 
     public Hitter (double singleRate, double doubleRate, double homeRunRate, double walkRate){
         if(singleRate + doubleRate + homeRunRate + walkRate > 1.0) {
-            throw new IllegalArgumentException("Home Run Rate + Double Rate should never be greater than " +
-                    "a hitter's batting average");
+            throw new IllegalArgumentException("A hitter's singleRate + doubleRate + homeRunRate + walkRate should never be more than 1."); 
         }
         this.singleRate = singleRate;
         this.doubleRate = doubleRate;
