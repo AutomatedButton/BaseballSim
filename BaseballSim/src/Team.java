@@ -7,11 +7,22 @@ public class Team {
     ArrayList<Hitter> players;
     int orderPosition;
 
-    public Team(double singleRate, double doubleRate, double tripleRate, double homeRunRate, double walkRate) {
+    public Team(Hitter player) {
+        this(player, player, player, player, player, player, player, player, player);
+    }
+
+    public Team(Hitter player1, Hitter player2, Hitter player3, Hitter player4, Hitter player5,
+                Hitter player6, Hitter player7, Hitter player8, Hitter player9) {
         this.players = new ArrayList<Hitter>();
-        for (int i = 0; i < 9; i++) {
-             this.players.add(new Hitter(singleRate, doubleRate, tripleRate, homeRunRate, walkRate));
-        }
+        this.players.add(player1);
+        this.players.add(player2);
+        this.players.add(player3);
+        this.players.add(player4);
+        this.players.add(player5);
+        this.players.add(player6);
+        this.players.add(player7);
+        this.players.add(player8);
+        this.players.add(player9);
         this.score = 0;
         this.hits = 0;
         this.orderPosition = 1;

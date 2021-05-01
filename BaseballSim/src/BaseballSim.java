@@ -4,11 +4,13 @@ public class BaseballSim {
     public static void main(String[] args){
         int AwayTeamWins = 0;
         int HomeTeamWins = 0;
+        Hitter exampleSmallBaller = new Hitter(.300, 0.0, 0.0, 0.0, 0.088);
+        Hitter exampleSlugger = new Hitter(0.0, .13, 0.0, 0.07, 0.088);
 
         //for (int j = 0; j < 1000000; j++){
 
-        Team awayTeam = new Team(0.300, 0.0, 0.0, 0.0, 0.088);
-        Team homeTeam = new Team(0.0, 0.13, 0.0, .07, 0.088);
+        Team awayTeam = new Team(exampleSmallBaller);
+        Team homeTeam = new Team(exampleSlugger);
             boolean isGameOver = false;
             int inning = 1;
             // This variable just keeps track of the outcome of the current plate appearance

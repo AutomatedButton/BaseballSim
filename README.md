@@ -32,7 +32,3 @@ The fielding team is assumed to never make errors.
 ### The Count
 
 Because this simulation was created to test the abilities of hitters, I only really cared about the outcome of the plate appearance, and not how it progressed. So there is no mechanism in this project to keep track of the count.
-
-### Team Construction
-
-Right now the teams are entirely uniform, so every player on the same team is essentially the same player. This shouldn't be too difficult to fix, but that is how the simulation currently works.
