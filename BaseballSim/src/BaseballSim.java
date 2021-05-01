@@ -1,20 +1,6 @@
 import java.util.ArrayList;
 
 public class BaseballSim {
-    // These are our teams
-    static ArrayList<Hitter> AwayTeam = new ArrayList<Hitter>();
-    static ArrayList<Hitter> HomeTeam = new ArrayList<Hitter>();
-
-    // Setting up the two teams; if I ever move on to non-uniform teams this will need to be amended
-    static {
-        for (int i = 0; i < 9; i++) {
-            // Single, Double, and HR-rate are all based on the original question.
-            // Walk-rate is based on the MLB league average walk-rate as of 4/29/2021, shortened to 3 decimal places
-            AwayTeam.add(i, new Hitter(0.300, 0.0, 0.0, 0.0, 0.088));
-            HomeTeam.add(i, new Hitter(0.0, 0.13, 0.0, .07, 0.088));
-        }
-    }
-
     public static void main(String[] args){
         int AwayTeamWins = 0;
         int HomeTeamWins = 0;
@@ -93,16 +79,6 @@ public class BaseballSim {
             }
         }
         return score;
-    }
-
-    public static ArrayList<Hitter> ClearBases(ArrayList<Hitter> bases) {
-        if (bases.size() != 3) {
-            throw new IllegalArgumentException("The provided bases don't have the right number of bases");
-        }
-        for (int i = 0; i < 3; i++) {
-            bases.set(i, null);
-        }
-        return bases;
     }
 
     public static Team SimulateHalfInning(Team team) {
