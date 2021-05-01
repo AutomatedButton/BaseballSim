@@ -10,8 +10,8 @@ public class BaseballSim {
         for (int i = 0; i < 9; i++) {
             // Single, Double, and HR-rate are all based on the original question.
             // Walk-rate is based on the MLB league average walk-rate as of 4/29/2021, shortened to 3 decimal places
-            AwayTeam.add(i, new Hitter(0.300, 0.0, 0.0, 0.088));
-            HomeTeam.add(i, new Hitter(0.0, 0.13, .07, 0.088));
+            AwayTeam.add(i, new Hitter(0.300, 0.0, 0.0, 0.0, 0.088));
+            HomeTeam.add(i, new Hitter(0.0, 0.13, 0.0, .07, 0.088));
         }
     }
 
@@ -20,24 +20,11 @@ public class BaseballSim {
         int HomeTeamWins = 0;
 
         //for (int j = 0; j < 1000000; j++){
-            // These keep track of the batting order for the respective teams
-            int AwayTeamOrderPosition = 1;
-            int HomeTeamOrderPosition = 1;
-            // These keep track of the score for the respective teams
-            int AwayTeamScore = 0;
-            int HomeTeamScore = 0;
-            // These keep track of the number of hits each team well... hits
-            int AwayTeamHits = 0;
-            int HomeTeamHits = 0;
-            // These keep track of the outs in a half-inning and the basepaths
-            int outs = 0;
+
+        Team awayTeam = new Team(0.300, 0.0, 0.0, 0.0, 0.088);
+        Team homeTeam = new Team(0.0, 0.13, 0.0, .07, 0.088);
             boolean isGameOver = false;
             int inning = 1;
-            ArrayList<Hitter> basepaths = new ArrayList<Hitter>();
-            // This loop just sets up the basepaths
-            for (int i = 0; i < 3; i++) {
-                basepaths.add(null);
-            }
             // This variable just keeps track of the outcome of the current plate appearance
             PAOutcome PAResult;
             // This is the main loop
@@ -45,146 +32,24 @@ public class BaseballSim {
             /* This while loop simulates a half inning with TeamOne hitting. This is probably
              the area of the code I'm least satisfied with, because it repeats itself a fair bit
              in the bottom half of the inning.*/
-                while (outs < 3) {
-                    // Simulates a plate appearance for the current batter
-                    PAResult = simulatePA(AwayTeam.get(AwayTeamOrderPosition - 1));
-                    // This if/else if monster handles the various outcomes of a plate appearance
-                    if (PAResult == PAOutcome.Out) {
-                        outs++;
-                    } else if (PAResult == PAOutcome.Single) {
-                        if (basepaths.get(2) != null) {
-                            basepaths.set(2, null);
-                            AwayTeamScore++;
-                        }
-                        if (basepaths.get(1) != null) {
-                            basepaths.set(2, basepaths.get(1));
-                            basepaths.set(1, null);
-                        }
-                        if (basepaths.get(0) != null) {
-                            basepaths.set(1, basepaths.get(0));
-                        }
-                        basepaths.set(0, AwayTeam.get(AwayTeamOrderPosition - 1));
-                        AwayTeamHits++;
-                    } else if (PAResult == PAOutcome.Double) {
-                        if (basepaths.get(2) != null) {
-                            basepaths.set(2, null);
-                            AwayTeamScore++;
-                        }
-                        if (basepaths.get(1) != null) {
-                            basepaths.set(1, null);
-                            AwayTeamScore++;
-                        }
-                        if (basepaths.get(0) != null) {
-                            basepaths.set(2, basepaths.get(0));
-                            basepaths.set(0, null);
-                        }
-                        basepaths.set(1, AwayTeam.get(AwayTeamOrderPosition - 1));
-                        AwayTeamHits++;
-                    } else if (PAResult == PAOutcome.Triple) {
-                        AwayTeamScore = ScoreAllBases(AwayTeamScore, basepaths);
-                        basepaths = ClearBases(basepaths);
-                        basepaths.set(2, AwayTeam.get(AwayTeamOrderPosition - 1));
-                        AwayTeamHits++;
-                    } else if (PAResult == PAOutcome.HomeRun) {
-                        AwayTeamScore = ScoreAllBases(AwayTeamScore, basepaths) + 1;
-                        basepaths = ClearBases(basepaths);
-                        AwayTeamHits++;
-                    } else {
-                        // The only case left to handle should be a walk, so this should handle that
-                        if (basepaths.get(0) != null) {
-                            if (basepaths.get(1) != null) {
-                                if (basepaths.get(2) != null) {
-                                    AwayTeamScore++;
-                                }
-                                basepaths.set(2, basepaths.get(1));
-                            }
-                            basepaths.set(1, basepaths.get(0));
-                        }
-                        basepaths.set(0, AwayTeam.get(AwayTeamOrderPosition - 1));
-                    }
-                    // Uptick the batting order after the plate appearance resolves
-                    AwayTeamOrderPosition = UptickOrderPosition(AwayTeamOrderPosition);
-                }
-                outs = 0;
-                basepaths = ClearBases(basepaths);
-                // In the current build this is the middle of the inning
+                awayTeam = SimulateHalfInning(awayTeam);
 
-                if (inning == 9 && (HomeTeamScore > AwayTeamScore)) {
+                if (inning == 9 && (homeTeam.score > awayTeam.score)) {
                     isGameOver = true;
                     System.out.println("The game ended after 8 1/2 innings");
                     break;
                 }
 
-                while (outs < 3) {
-                    PAResult = simulatePA(HomeTeam.get(HomeTeamOrderPosition - 1));
-                    if (PAResult == PAOutcome.Out) {
-                        outs++;
-                    } else if (PAResult == PAOutcome.Single) {
-                        if (basepaths.get(2) != null) {
-                            basepaths.set(2, null);
-                            HomeTeamScore++;
-                        }
-                        if (basepaths.get(1) != null) {
-                            basepaths.set(2, basepaths.get(1));
-                            basepaths.set(1, null);
-                        }
-                        if (basepaths.get(0) != null) {
-                            basepaths.set(1, basepaths.get(0));
-                        }
-                        basepaths.set(0, HomeTeam.get(HomeTeamOrderPosition - 1));
-                        HomeTeamHits++;
-                    } else if (PAResult == PAOutcome.Double) {
-                        if (basepaths.get(2) != null) {
-                            basepaths.set(2, null);
-                            HomeTeamScore++;
-                        }
-                        if (basepaths.get(1) != null) {
-                            basepaths.set(1, null);
-                            AwayTeamScore++;
-                        }
-                        if (basepaths.get(0) != null) {
-                            basepaths.set(2, basepaths.get(0));
-                            basepaths.set(0, null);
-                        }
-                        basepaths.set(1, HomeTeam.get(HomeTeamOrderPosition - 1));
-                        HomeTeamHits++;
-                    } else if (PAResult == PAOutcome.Triple) {
-                        HomeTeamScore = ScoreAllBases(HomeTeamScore, basepaths);
-                        basepaths = ClearBases(basepaths);
-                        basepaths.set(2, HomeTeam.get(HomeTeamOrderPosition - 1));
-                        HomeTeamHits++;
-                    } else if (PAResult == PAOutcome.HomeRun) {
-                        HomeTeamScore = ScoreAllBases(HomeTeamScore, basepaths) + 1;
-                        basepaths = ClearBases(basepaths);
-                        HomeTeamHits++;
-                    } else {
-                        // The only case left to handle should be a walk, so this should handle that
-                        if (basepaths.get(0) != null) {
-                            if (basepaths.get(1) != null) {
-                                if (basepaths.get(2) != null) {
-                                    HomeTeamScore++;
-                                }
-                                basepaths.set(2, basepaths.get(1));
-                            }
-                            basepaths.set(1, basepaths.get(0));
-                        }
-                        basepaths.set(0, HomeTeam.get(HomeTeamOrderPosition - 1));
-                    }
-                    // Uptick the batting order after the plate appearance resolves
-                    HomeTeamOrderPosition = UptickOrderPosition(HomeTeamOrderPosition);
-                }
-                // Reset the outs & bases
-                outs = 0;
-                basepaths = ClearBases(basepaths);
-                System.out.println("End of Inning " + inning + ": Away: " + AwayTeamScore + " Home: " + HomeTeamScore);
-                if (inning >= 9 && (AwayTeamScore != HomeTeamScore)) {
+                homeTeam = SimulateHalfInning(homeTeam);
+                System.out.println("End of Inning " + inning + ": Away: " + awayTeam.score + " Home: " + homeTeam.score);
+                if (inning >= 9 && (awayTeam.score != homeTeam.score)) {
                     isGameOver = true;
                 }
                 inning++;
 
             }
-            System.out.println("Final: Away: " + AwayTeamScore + ", Home: " + HomeTeamScore);
-            System.out.println("Hits: Away: " + AwayTeamHits + ", Home: " + HomeTeamHits);
+            System.out.println("Final: Away: " + awayTeam.score + ", Home: " + homeTeam.score);
+            System.out.println("Hits: Away: " + awayTeam.hits + ", Home: " + homeTeam.hits);
             /*if (AwayTeamScore > HomeTeamScore) {
                 AwayTeamWins++;
             } else {
@@ -206,7 +71,9 @@ public class BaseballSim {
             return PAOutcome.Single;
         } else if (rng <= batter.walkRate + batter.singleRate + batter.doubleRate) {
             return PAOutcome.Double;
-        } else if (rng <= batter.walkRate + batter.singleRate + batter.doubleRate + batter.homeRunRate) {
+        } else if (rng <= batter.walkRate + batter.singleRate + batter.doubleRate + batter.tripleRate) {
+            return PAOutcome.Triple;
+        } else if (rng <= batter.walkRate + batter.singleRate + batter.doubleRate + batter.tripleRate + batter.homeRunRate) {
             return PAOutcome.HomeRun;
         } else {
             return PAOutcome.Out;
@@ -214,12 +81,7 @@ public class BaseballSim {
 
     }
 
-    public static int UptickOrderPosition(int OrderPosition){
-        if (OrderPosition >= 9) {
-            return 1;
-        }
-        return OrderPosition + 1;
-    }
+
 
     public static int ScoreAllBases(int score, ArrayList<Hitter> bases) {
         if (bases.size() != 3) {
@@ -242,5 +104,76 @@ public class BaseballSim {
         }
         return bases;
     }
-    //Maybe a method or two to deal with runners on third?
+
+    public static Team SimulateHalfInning(Team team) {
+        int outs = 0;
+        ArrayList<Hitter> basepaths = new ArrayList<Hitter>();
+        // This loop just sets up the basepaths
+        for (int i = 0; i < 3; i++) {
+            basepaths.add(null);
+        }
+        //System.out.println(basepaths);
+        PAOutcome PAResult;
+
+        while (outs < 3) {
+            PAResult = simulatePA(team.players.get(team.orderPosition - 1));
+            if (PAResult == PAOutcome.Out) {
+                outs++;
+            } else if (PAResult == PAOutcome.Single) {
+                if (basepaths.get(2) != null) {
+                    basepaths.set(2, null);
+                    team.score++;
+                }
+                if (basepaths.get(1) != null) {
+                    basepaths.set(2, basepaths.get(1));
+                    basepaths.set(1, null);
+                }
+                if (basepaths.get(0) != null) {
+                    basepaths.set(1, basepaths.get(0));
+                }
+                basepaths.set(0, team.players.get(team.orderPosition - 1));
+                team.hits++;
+            } else if (PAResult == PAOutcome.Double) {
+                if (basepaths.get(2) != null) {
+                    basepaths.set(2, null);
+                    team.score++;
+                }
+                if (basepaths.get(1) != null) {
+                    basepaths.set(1, null);
+                    team.score++;
+                }
+                if (basepaths.get(0) != null) {
+                    basepaths.set(2, basepaths.get(0));
+                    basepaths.set(0, null);
+                }
+                basepaths.set(1, team.players.get(team.orderPosition - 1));
+                team.hits++;
+            } else if (PAResult == PAOutcome.Triple) {
+                team.score = ScoreAllBases(team.score, basepaths);
+                basepaths.set(2, team.players.get(team.orderPosition - 1));
+                team.hits++;
+            } else if (PAResult == PAOutcome.HomeRun) {
+                team.score = ScoreAllBases(team.score, basepaths) + 1;
+                team.hits++;
+            } else {
+                // The only case left to handle should be a walk, so this should handle that
+                if (basepaths.get(0) != null) {
+                    if (basepaths.get(1) != null) {
+                        if (basepaths.get(2) != null) {
+                            team.score++;
+                        }
+                        basepaths.set(2, basepaths.get(1));
+                    }
+                    basepaths.set(1, basepaths.get(0));
+                }
+                basepaths.set(0, team.players.get(team.orderPosition - 1));
+            }
+            // Uptick the batting order after the plate appearance resolves
+            team.uptickOrderPosition();
+        }
+        return team;
+    }
+
 }
+    //Maybe a method or two to deal with runners on third?
+
