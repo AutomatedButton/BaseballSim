@@ -11,11 +11,11 @@ Baseball is a complicated game, and while I will do my best to refine this game 
 
 ### Outs
 
-Right now the only type of out in the game is a strikeout, which has a knock-on effect that reduces a lot of the baserunning complexity in the game. This means that among other things, players will never ground into a double/triple play, hit a sacrifice fly, or get picked off on the basepaths.
+Players will never get thrown out, and the current ways of dealing with flyouts and groundouts are a little primitive at the moment.
 
 ### Baserunning
 
-Along with the things mentioned in the previous section, players will never attempt to steal a base or tag up on a deep fly ball. However the most important things to mention with regard to baserunning is that players will never get thrown out on the basepaths, but they will never try to get more bases than the batter. So if a player hits a single, all of the baserunners will advance only one base, even though there are situations in baseball which allow for runners to advance multiple bases on a single.
+Along with the things mentioned in the previous section, players will never attempt to steal a base. However the most important things to mention with regard to baserunning is that players will never get thrown out on the basepaths, but they will never try to get more bases than the batter. So if a player hits a single, all of the baserunners will advance only one base, even though there are situations in baseball which allow for runners to advance multiple bases on a single.
 
 ### Pitching
 

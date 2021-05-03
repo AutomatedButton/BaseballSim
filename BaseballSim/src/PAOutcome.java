@@ -1,5 +1,8 @@
 public enum PAOutcome {
-    Out,
+    StrikeOut,
+    LineOut,
+    FlyOut,
+    GroundOut,
     Single,
     Double,
     Triple,
